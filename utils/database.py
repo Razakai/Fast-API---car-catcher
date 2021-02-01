@@ -17,7 +17,7 @@ async def execute(query, isMany, values=None):  # insert, delete, update
     if isMany:
         await db.execute_many(query=query, values=values)
     else:
-        await db.execute(query=query, values=values)
+        print("adding to database", await db.execute(query=query, values=values))
 
     await disconnectDB(db)
 

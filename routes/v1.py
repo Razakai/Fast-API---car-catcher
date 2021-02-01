@@ -32,7 +32,6 @@ async def getLicencePlates():
 # post
 @server_v1.post("/user", status_code=HTTP_201_CREATED)
 async def createUser(user: User):
-    print(user)
     await UserService.createUser(user)
     return {"request body": user}
 
