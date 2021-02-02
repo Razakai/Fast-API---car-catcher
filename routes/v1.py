@@ -5,6 +5,7 @@ from starlette.requests import Request
 from service import CamersService, LicencePlatesService, JWTUserService, VehicleLocationsService, UserService
 from models.User import User
 from models.jwtUser import JWTUser
+from models.Camera import Camera
 from utils.security import authenticateUser, createJWTToken
 
 server_v1 = FastAPI()
@@ -33,7 +34,14 @@ async def getLicencePlates():
 @server_v1.post("/user", status_code=HTTP_201_CREATED)
 async def createUser(user: User):
     await UserService.createUser(user)
-    return {"request body": user}
+    return {"status": "Created"}
+
+
+@server_v1.post("/camera", status_code=HTTP_201_CREATED)
+async def createCamera(request: Request, camera: Camera):
+    jwtToken = request.headers["Authorization"].split(" ")[1]
+    await CamersService.createCamera(camera, jwtToken)
+    return {"status": "Created"}
 
 
 @server_v1.post("/login")

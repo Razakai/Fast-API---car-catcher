@@ -10,5 +10,11 @@ async def createUser(user: User):
     """
 
     values = {"email": user.email, "password": user.password, "first_name": user.firstName, "last_name": user.lastName}
-    print("values---", values)
     res = await execute(query=query, isMany=False, values=values)
+
+
+async def userExists(email: str):
+    query = "SELECT 1 FROM users WHERE email = :email"
+    values = {"email": email}
+
+    return await fetch(query=query, isOne=True, values=values)

@@ -59,3 +59,7 @@ async def checkJWTToken(token: str = Depends(oauthSchema)):
         return False
 
     return False
+
+
+def getEmailFromJWTToken(token: str = Depends(oauthSchema)):
+    return jwt.decode(token, JWT_SECRET_KEY, JWT_ALGORITHM).get("sub")
