@@ -2,7 +2,7 @@ from fastapi import FastAPI, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from starlette.status import HTTP_201_CREATED, HTTP_401_UNAUTHORIZED
 from starlette.requests import Request
-from service import CamersService, LicencePlatesService, JWTUserService, VehicleLocationsService, UserService
+from service import CamersService, LicencePlatesService, VehicleLocationsService, UserService
 from models.User import User
 from models.jwtUser import JWTUser
 from models.Camera import Camera
