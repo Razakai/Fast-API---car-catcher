@@ -12,3 +12,10 @@ async def cameraExists(camera: Camera) -> bool:
     values = {"url": camera.url}
 
     return False if await fetch(query=query, isOne=True, values=values) is None else True
+
+
+async def createCamera(camera: Camera) -> bool:
+    query = "INSERT INTO cameras VALUES(:url, :city, :country, :userID)"
+    values = {"url": camera.url, "city": camera.city, "country": camera.country, "userID": camera.userID}
+
+    return await execute(query=query, isMany=False, values=values)

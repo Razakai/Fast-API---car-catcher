@@ -16,3 +16,10 @@ async def userExists(email: str):
     res = await UserDao.userExists(email)
     return True if res is None else False
 
+
+async def getUserByEmail(email: str) -> dict:
+    res = await UserDao.getUserByEmail(email)
+    if res is None:
+        return {}
+    return dict(res)
+

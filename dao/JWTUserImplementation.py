@@ -9,6 +9,6 @@ async def getUserByEmail(user: JWTUser) -> list:
 
 
 async def isUserPresentByEmail(email: str) -> list:
-    query = "SELECT * from users WHERE email = :email"
+    query = "SELECT 1 from users WHERE email = :email"
     values = {"email": email}
     return await fetch(query=query, isOne=True, values=values)

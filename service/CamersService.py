@@ -1,20 +1,26 @@
-import dao.CameraImplementation as CameraServiceDao
+import dao.CameraImplementation as CameraDao
 from models.Camera import Camera
 from utils.security import getEmailFromJWTToken
-from service.UserService import userExists
+from service.UserService import getUserByEmail
+from fastapi import HTTPException
+from starlette.status import HTTP_409_CONFLICT
 
 
 async def getAllCameras() -> [dict]:
-    res = await CameraServiceDao.getCameras()
+    res = await CameraDao.getCameras()
 
     return [dict(item) for item in res]
 
 
-async def createCamera(camera: Camera, token: str):
+async def createCamera(camera: Camera, token: str) -> bool:
     email = getEmailFromJWTToken(token)
-    if await userExists(email):
-        pass
+    user = await getUserByEmail(email)
+    camera.userID = user["userID"]
+    if not await cameraExists(camera):
+        await CameraDao.createCamera(camera)
+    else:
+        raise HTTPException(status_code=HTTP_409_CONFLICT, detail="Duplicate Camera")
 
 
 async def cameraExists(camera: Camera) -> bool:
-    return await CameraServiceDao.cameraExists(camera)
+    return await CameraDao.cameraExists(camera)

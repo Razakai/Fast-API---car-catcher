@@ -4,9 +4,7 @@ import dao.JWTUserImplementation as JWTDao
 async def isUserPresentByEmail(email: str) -> bool:
     res = await JWTDao.isUserPresentByEmail(email)
 
-    if res is None:
-        return {}
-    return res
+    return True if res is not None else False
 
 
 async def getUserByEmail(user: JWTDao) -> dict:
