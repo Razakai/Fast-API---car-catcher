@@ -51,14 +51,12 @@ async def checkJWTToken(token: str = Depends(oauthSchema)):
 
         if time.time() < exp:
 
-            isValid = await JWTUserService.isUserPresentByEmail(email)
-
-            if isValid:
+            if await JWTUserService.isUserPresentByEmail(email):
                 return True
+
+        return False
     except Exception as e:
         return False
-
-    return False
 
 
 def getEmailFromJWTToken(token: str = Depends(oauthSchema)):

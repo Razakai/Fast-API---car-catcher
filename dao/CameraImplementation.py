@@ -7,11 +7,11 @@ async def getCameras() -> list:
     return await fetch(query, isOne=False)
 
 
-async def cameraExists(camera: Camera) -> bool:
+async def cameraExists(camera: Camera) -> list:
     query = "SELECT 1 FROM cameras where url = :url"
     values = {"url": camera.url}
 
-    return False if await fetch(query=query, isOne=True, values=values) is None else True
+    return await fetch(query=query, isOne=True, values=values)
 
 
 async def createCamera(camera: Camera) -> bool:

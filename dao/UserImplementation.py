@@ -2,7 +2,7 @@ from utils.database import fetch, execute
 from models.User import User
 
 
-async def createUser(user: User):
+async def createUser(user: User) -> bool:
     query = """
         INSERT INTO users
         VALUES
@@ -13,7 +13,7 @@ async def createUser(user: User):
     return await execute(query=query, isMany=False, values=values)
 
 
-async def userExists(email: str):
+async def userExists(email: str) -> list:
     query = "SELECT 1 FROM users WHERE email = :email"
     values = {"email": email}
 

@@ -3,8 +3,7 @@ import dao.VehicleLocationsDao as LocationsDao
 
 async def getVehicleLocations() -> [dict]:
     res = await LocationsDao.getVehicleLocations()
-    res = [dict(item) for item in res]
-    return res
+    return [dict(item) for item in res]
 
     '''
     if len(res) > 0:

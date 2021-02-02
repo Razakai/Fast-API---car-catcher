@@ -17,10 +17,10 @@ async def createCamera(camera: Camera, token: str) -> bool:
     user = await getUserByEmail(email)
     camera.userID = user["userID"]
     if not await cameraExists(camera):
-        await CameraDao.createCamera(camera)
+        return await CameraDao.createCamera(camera)
     else:
         raise HTTPException(status_code=HTTP_409_CONFLICT, detail="Duplicate Camera")
 
 
 async def cameraExists(camera: Camera) -> bool:
-    return await CameraDao.cameraExists(camera)
+    return False if await CameraDao.cameraExists(camera) is None else True
