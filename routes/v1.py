@@ -7,6 +7,7 @@ from models.User import User
 from models.jwtUser import JWTUser
 from models.Camera import Camera
 from models.LicencePlate import LicencePlate
+from models.vehicleSighting import VehicleSighting
 from utils.security import authenticateUser, createJWTToken
 
 server_v1 = FastAPI()
@@ -49,6 +50,12 @@ async def createCamera(request: Request, camera: Camera):
 async def createLicencePlate(request: Request, licencePlate: LicencePlate):
     jwtToken = request.headers["Authorization"].split(" ")[1]
     await LicencePlatesService.createLicencePlate(licencePlate, jwtToken)
+    return {"status": "Created"}
+
+
+@server_v1.post("/sighting", status_code=HTTP_201_CREATED)
+async def createVehicleSighting(vehicleSighting: VehicleSighting):
+    await VehicleLocationsService.createVehicleSighting(vehicleSighting)
     return {"status": "Created"}
 
 

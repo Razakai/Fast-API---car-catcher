@@ -1,4 +1,5 @@
 from utils.database import execute, fetch
+from models.vehicleSighting import VehicleSighting
 
 
 async def getVehicleLocations() -> list:
@@ -12,3 +13,13 @@ async def getVehicleLocations() -> list:
     vehicleLocations.registrationID = vehicleRegistrations.registrationID
     """
     return await fetch(query=query, isOne=False)
+
+
+async def createVehicleSighting(vehicleSighting: VehicleSighting) -> bool:
+    query = """
+    INSERT INTO vehicleLocations
+    VALUES(locationID, :city, :country, :registrationID)
+    """
+    values = {"city": vehicleSighting.city, "country": vehicleSighting.country, "registrationID": vehicleSighting.registrationID}
+
+    return await execute(query=query, isMany=False, values=values)

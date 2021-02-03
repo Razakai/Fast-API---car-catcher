@@ -23,3 +23,7 @@ async def createLicencePlate(licencePlate: LicencePlate, token: str) -> bool:
 
 async def licencePlateExists(registrationNum: str) -> bool:
     return False if await LicencePlateDao.licencePlateExists(registrationNum) is None else True
+
+
+async def licencePlateExistsByID(id: int) -> bool:
+    return False if await LicencePlateDao.licencePlateExistsByID(id) is None else True

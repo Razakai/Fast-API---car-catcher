@@ -19,3 +19,10 @@ async def licencePlateExists(registrationNumber: str) -> list:
     values = {"plateRegistration": registrationNumber}
 
     return await fetch(query=query, isOne=True, values=values)
+
+
+async def licencePlateExistsByID(id: int) -> list:
+    query = "SELECT 1 FROM vehicleRegistrations WHERE registrationID = :id"
+    values = {"id": id}
+
+    return await fetch(query=query, isOne=True, values=values)

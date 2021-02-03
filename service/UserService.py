@@ -8,8 +8,8 @@ async def createUser(user: User) -> bool:
     if await userExists(user.email):
         user.password = getHashedPassword(user.password)
         return await UserDao.createUser(user)
-    else:
-        raise HTTPException(status_code=409, detail="Duplicate User")
+
+    raise HTTPException(status_code=409, detail="Duplicate User")
 
 
 async def userExists(email: str) -> bool:
