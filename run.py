@@ -12,7 +12,7 @@ server.mount("/v1", server_v1)
 
 @server.middleware("http")
 async def middleware(request: Request, callNext):
-    if not any(word in str(request.url) for word in ["/login", "/user", "/docs", "/openapi.json"]):
+    if not any(word in str(request.url) for word in ["/login", "/newUser", "/docs", "/openapi.json"]):
         try:
             jwtToken = request.headers["Authorization"].split(" ")[1]
 

@@ -23,7 +23,7 @@ async def getCameras():
 @server_v1.get("/sightings")
 async def getVehicleSightings():
     sightings = await VehicleLocationsService.getVehicleLocations()
-    return{"sightings": sightings}
+    return {"sightings": sightings}
 
 
 @server_v1.get("/licencePlates")
@@ -33,7 +33,7 @@ async def getLicencePlates():
 
 
 # post
-@server_v1.post("/user", status_code=HTTP_201_CREATED)
+@server_v1.post("/newUser", status_code=HTTP_201_CREATED)
 async def createUser(user: User):
     await UserService.createUser(user)
     return {"status": "Created"}
@@ -70,3 +70,11 @@ async def loginForAccessToken(form_data: OAuth2PasswordRequestForm = Depends()):
 
     jwt_token = createJWTToken(user)
     return {"token": jwt_token}
+
+
+# delete
+@server_v1.delete("/user")
+async def deleteUser(request: Request):
+    jwtToken = request.headers["Authorization"].split(" ")[1]
+    await UserService.deleteUser(jwtToken)
+    return {"status": "User deleted"}

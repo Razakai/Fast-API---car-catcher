@@ -24,3 +24,9 @@ async def getUserByEmail(email: str) -> list:
     query = "SELECT * from users WHERE email = :email"
     values = {"email": email}
     return await fetch(query=query, isOne=True, values=values)
+
+
+async def deleteUser(email: str) -> bool:
+    query = "DELETE FROM users WHERE email = :email"
+    values = {"email": email}
+    return await execute(query=query, isMany=False, values=values)
