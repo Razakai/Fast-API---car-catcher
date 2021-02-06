@@ -30,3 +30,13 @@ async def deleteUser(email: str) -> bool:
     query = "DELETE FROM users WHERE email = :email"
     values = {"email": email}
     return await execute(query=query, isMany=False, values=values)
+
+
+async def updateUser(user: User, id: int) -> bool:
+    query = """
+    UPDATE users
+    SET email = :email, password = :password, first_name = :first_name, last_name = :last_name
+    WHERE userID = :userID
+    """
+    values = {"email": user.email, "password": user.password, "first_name": user.firstName, "last_name": user.lastName, "userID": id}
+    return await execute(query=query, isMany=False, values=values)

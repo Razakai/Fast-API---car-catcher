@@ -107,3 +107,10 @@ async def updateCamera(request: Request, id: int, camera: Camera):
     await CamersService.updateCamera(jwtToken, id, camera)
     return {"status": "Camera updated"}
 
+
+@server_v1.put("/user/{id}")
+async def updateUser(request: Request, id: int, user: User):
+    jwtToken = request.headers["Authorization"].split(" ")[1]
+    await UserService.updateUser(jwtToken, user, id)
+    return {"status": "User updated"}
+
