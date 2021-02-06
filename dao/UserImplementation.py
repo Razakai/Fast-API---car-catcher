@@ -21,7 +21,7 @@ async def userExists(email: str) -> list:
 
 
 async def getUserByEmail(email: str) -> list:
-    query = "SELECT * from users WHERE email = :email"
+    query = "SELECT userID, email, first_name, last_name from users WHERE email = :email"
     values = {"email": email}
     return await fetch(query=query, isOne=True, values=values)
 
@@ -40,3 +40,4 @@ async def updateUser(user: User, id: int) -> bool:
     """
     values = {"email": user.email, "password": user.password, "first_name": user.firstName, "last_name": user.lastName, "userID": id}
     return await execute(query=query, isMany=False, values=values)
+

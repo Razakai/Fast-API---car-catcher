@@ -46,3 +46,8 @@ async def updateUser(token: str, user: User, id: int) -> bool:
     raise HTTPException(status_code=HTTP_409_CONFLICT, detail="A user can only edit their own details")
 
 
+async def getUser(token: str) -> dict:
+    email = getEmailFromJWTToken(token)
+    return await getUserByEmail(email)
+
+

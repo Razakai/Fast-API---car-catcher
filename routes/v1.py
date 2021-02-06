@@ -26,6 +26,13 @@ async def getVehicleSightings():
     return {"sightings": sightings}
 
 
+@server_v1.get("/user")
+async def getUser(request: Request):
+    jwtToken = request.headers["Authorization"].split(" ")[1]
+    user = await UserService.getUser(jwtToken)
+    return {"user": user}
+
+
 @server_v1.get("/licencePlates")
 async def getLicencePlates():
     licencePlates = await LicencePlatesService.getLicencePlates()
@@ -113,4 +120,3 @@ async def updateUser(request: Request, id: int, user: User):
     jwtToken = request.headers["Authorization"].split(" ")[1]
     await UserService.updateUser(jwtToken, user, id)
     return {"status": "User updated"}
-
