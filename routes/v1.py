@@ -100,3 +100,10 @@ async def updateLicencePlate(request: Request, id: int, licencePlate: LicencePla
     await LicencePlatesService.updateLicencePlate(jwtToken, id, licencePlate)
     return {"status": "Licence plate updated"}
 
+
+@server_v1.put("/camera/{id}")
+async def updateCamera(request: Request, id: int, camera: Camera):
+    jwtToken = request.headers["Authorization"].split(" ")[1]
+    await CamersService.updateCamera(jwtToken, id, camera)
+    return {"status": "Camera updated"}
+

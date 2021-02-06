@@ -45,3 +45,16 @@ async def deleteCamera(token: str, cameraID: int) -> bool:
         raise HTTPException(status_code=HTTP_500_INTERNAL_SERVER_ERROR, detail="Could not delete camera")
 
     raise HTTPException(status_code=HTTP_409_CONFLICT, detail="Camera does not belong to current user")
+
+
+async def updateCamera(token: str, cameraID: int, camera: Camera) -> bool:
+    email = getEmailFromJWTToken(token)
+    user = await getUserByEmail(email)
+    currentCamera = await getCameraByID(cameraID)
+    if currentCamera["userID"] == user["userID"]:
+        if await CameraDao.updateCamera(camera, cameraID):
+            return True
+
+        raise HTTPException(status_code=HTTP_500_INTERNAL_SERVER_ERROR, detail="Could not update camera")
+
+    raise HTTPException(status_code=HTTP_409_CONFLICT, detail="Camera does not belong to current user")

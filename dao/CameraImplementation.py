@@ -32,3 +32,13 @@ async def deleteCamera(cameraID: int) -> bool:
     query = "DELETE FROM cameras WHERE cameraID = :cameraID"
     values = {"cameraID": cameraID}
     return await execute(query=query, isMany=False, values=values)
+
+
+async def updateCamera(camera: Camera, id: int) -> bool:
+    query = """
+    UPDATE cameras
+    SET url = :url, city = :city, country = :country, userID = :userID
+    WHERE cameraID = :cameraID
+    """
+    values = {"url": camera.url, "city": camera.city, "country": camera.country, "userID": camera.userID, "cameraID": id}
+    return await execute(query=query, isMany=False, values=values)

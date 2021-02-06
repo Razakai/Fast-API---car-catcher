@@ -3,7 +3,7 @@ from utils.const import DB_USER, DB_HOST, DB_NAME, DB_PASSWORD
 
 
 from fastapi import HTTPException
-from starlette.status import HTTP_500_INTERNAL_SERVER_ERROR
+from starlette.status import HTTP_409_CONFLICT, HTTP_500_INTERNAL_SERVER_ERROR
 
 
 async def connectDB():
@@ -30,7 +30,7 @@ async def execute(query, isMany, values=None) -> bool:  # insert, delete, update
 
     except Exception as e:
         await disconnectDB(db)
-        raise HTTPException(status_code=HTTP_500_INTERNAL_SERVER_ERROR, detail="Database Error")
+        raise HTTPException(status_code=HTTP_409_CONFLICT, detail="Conflicting database entry")
 
 
 async def fetch(query, isOne, values=None) -> list:  # get
