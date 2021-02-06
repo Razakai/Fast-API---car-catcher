@@ -18,8 +18,8 @@ async def getVehicleLocations() -> list:
 async def createVehicleSighting(vehicleSighting: VehicleSighting) -> bool:
     query = """
     INSERT INTO vehicleLocations
-    VALUES(locationID, :city, :country, :registrationID)
+    VALUES(locationID, :city, :country, :time, :registrationID)
     """
-    values = {"city": vehicleSighting.city, "country": vehicleSighting.country, "registrationID": vehicleSighting.registrationID}
+    values = {"city": vehicleSighting.city, "country": vehicleSighting.country, "registrationID": vehicleSighting.registrationID, "time": vehicleSighting.DateTime}
 
     return await execute(query=query, isMany=False, values=values)

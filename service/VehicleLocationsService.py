@@ -2,10 +2,13 @@ import dao.VehicleLocationsDao as LocationsDao
 from models.vehicleSighting import VehicleSighting
 from service.LicencePlatesService import licencePlateExistsByID
 from fastapi import HTTPException
+from datetime import datetime
 
 
 async def createVehicleSighting(vehicleSighting: VehicleSighting) -> bool:
     if await licencePlateExistsByID(vehicleSighting.registrationID):
+        vehicleSighting.DateTime = str(datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"))
+        print(vehicleSighting)
         if await LocationsDao.createVehicleSighting(vehicleSighting):
             return True
 
