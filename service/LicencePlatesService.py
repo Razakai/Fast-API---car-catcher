@@ -34,7 +34,7 @@ async def getLicencePlateByID(id: int) -> dict:
     if res is not None:
         return dict(res)
 
-    raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail="Camera does not exist")
+    raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail="Licence plate does not exist")
 
 
 async def deleteLicencePlate(token: str, licencePlateID: int) -> bool:
@@ -49,3 +49,15 @@ async def deleteLicencePlate(token: str, licencePlateID: int) -> bool:
 
     raise HTTPException(status_code=HTTP_409_CONFLICT, detail="Licence plate does not belong to current user")
 
+
+async def updateLicencePlate(token: str, licencePlateID: int, licencePlate: LicencePlate) -> bool:
+    email = getEmailFromJWTToken(token)
+    user = await getUserByEmail(email)
+    currentLicencePlate = await getLicencePlateByID(licencePlateID)
+    if currentLicencePlate["userID"] == user["userID"]:
+        if await LicencePlateDao.updateLicencePlate(licencePlate, licencePlateID):
+            return True
+
+        raise HTTPException(status_code=HTTP_500_INTERNAL_SERVER_ERROR, detail="Could not update licence plate")
+
+    raise HTTPException(status_code=HTTP_409_CONFLICT, detail="Licence plate does not belong to current user")

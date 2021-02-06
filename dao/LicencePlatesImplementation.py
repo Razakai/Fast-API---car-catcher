@@ -39,3 +39,13 @@ async def deleteLicencePlate(id: int) -> bool:
     query = "DELETE FROM vehicleRegistrations WHERE registrationID = :registrationID"
     values = {"registrationID": id}
     return await execute(query=query, isMany=False, values=values)
+
+
+async def updateLicencePlate(licencePlate: LicencePlate, id: int) -> bool:
+    query = """
+    UPDATE vehicleRegistrations
+    SET plateRegistration = :plateRegistration, userID = :userID
+    WHERE registrationID = :registrationID
+    """
+    values = {"plateRegistration": licencePlate.plateRegistration, "userID": licencePlate.userID, "registrationID": id}
+    return await execute(query=query, isMany=False, values=values)
