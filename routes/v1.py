@@ -86,3 +86,10 @@ async def deleteCamera(request: Request, id: int):
     await CamersService.deleteCamera(jwtToken, id)
     return {"status": "Camera deleted"}
 
+
+@server_v1.delete("/licencePlate/{id}")
+async def deleteCamera(request: Request, id: int):
+    jwtToken = request.headers["Authorization"].split(" ")[1]
+    await LicencePlatesService.deleteLicencePlate(jwtToken, id)
+    return {"status": "Licence plate deleted"}
+

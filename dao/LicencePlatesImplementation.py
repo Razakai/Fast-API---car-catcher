@@ -26,3 +26,16 @@ async def licencePlateExistsByID(id: int) -> list:
     values = {"id": id}
 
     return await fetch(query=query, isOne=True, values=values)
+
+
+async def getLicencePlateByID(id: int) -> list:
+    query = "SELECT * FROM vehicleRegistrations WHERE registrationID = :registrationID"
+    values = {"registrationID": id}
+
+    return await fetch(query=query, isOne=True, values=values)
+
+
+async def deleteLicencePlate(id: int) -> bool:
+    query = "DELETE FROM vehicleRegistrations WHERE registrationID = :registrationID"
+    values = {"registrationID": id}
+    return await execute(query=query, isMany=False, values=values)
