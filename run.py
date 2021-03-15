@@ -32,11 +32,7 @@ async def middleware(request: Request, callNext):
         if request.method == "OPTIONS":
             return Response("ok", status_code=200, headers={"Access-Control-Allow-Origin": "*", "Access-Control-Allow-Credentials": "true", "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS,POST,PUT,DELETE,UPDATE", "Access-Control-Allow-Headers": "Origin,Accept, X-Requested-With, authorization, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"})
         try:
-            print("hiii")
-            print(request.method)
-            print(request.headers["Authorization"])
             jwtToken = request.headers["Authorization"].split(" ")[1] # Authorization
-            print(jwtToken)
 
             if not await checkJWTToken(jwtToken):
                 return Response("Unauthorized", status_code=HTTP_401_UNAUTHORIZED)

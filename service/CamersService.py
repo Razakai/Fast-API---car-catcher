@@ -52,8 +52,11 @@ async def updateCamera(token: str, cameraID: int, camera: Camera) -> bool:
     user = await getUserByEmail(email)
     currentCamera = await getCameraByID(cameraID)
     if currentCamera["userID"] == user["userID"]:
+        if camera.userID == None:
+            camera.userID = user["userID"]
         if await CameraDao.updateCamera(camera, cameraID):
-            return True
+            camera.cameraID = cameraID
+            return camera
 
         raise HTTPException(status_code=HTTP_500_INTERNAL_SERVER_ERROR, detail="Could not update camera")
 

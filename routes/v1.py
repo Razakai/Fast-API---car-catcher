@@ -49,8 +49,8 @@ async def createUser(user: User):
 @server_v1.post("/camera", status_code=HTTP_201_CREATED)
 async def createCamera(request: Request, camera: Camera):
     jwtToken = request.headers["Authorization"].split(" ")[1]
-    await CamersService.createCamera(camera, jwtToken)
-    return {"status": "Created"}
+    cameraID = await CamersService.createCamera(camera, jwtToken)
+    return {"cameraID": cameraID, "url": camera.url, "city": camera.city, "country": camera.country}
 
 
 @server_v1.post("/licencePlate", status_code=HTTP_201_CREATED)
@@ -111,8 +111,8 @@ async def updateLicencePlate(request: Request, id: int, licencePlate: LicencePla
 @server_v1.put("/camera/{id}")
 async def updateCamera(request: Request, id: int, camera: Camera):
     jwtToken = request.headers["Authorization"].split(" ")[1]
-    await CamersService.updateCamera(jwtToken, id, camera)
-    return {"status": "Camera updated"}
+    camera = await CamersService.updateCamera(jwtToken, id, camera)
+    return camera
 
 
 @server_v1.put("/user/{id}")

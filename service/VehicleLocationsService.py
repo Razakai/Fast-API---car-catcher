@@ -9,7 +9,7 @@ async def createVehicleSighting(vehicleSighting: VehicleSighting) -> bool:
     if await licencePlateExistsByID(vehicleSighting.registrationID):
         #vehicleSighting.DateTime = str(datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"))
         vehicleSighting.DateTime = datetime.utcnow()
-        print(vehicleSighting)
+        
         if await LocationsDao.createVehicleSighting(vehicleSighting):
             return True
 

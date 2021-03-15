@@ -26,7 +26,7 @@ async def execute(query, isMany, values=None) -> bool:  # insert, delete, update
             res = await db.execute(query=query, values=values)
 
         await disconnectDB(db)
-        return True if res >= 1 else False
+        return res
 
     except Exception as e:
         await disconnectDB(db)
