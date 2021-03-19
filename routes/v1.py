@@ -56,8 +56,8 @@ async def createCamera(request: Request, camera: Camera):
 @server_v1.post("/licencePlate", status_code=HTTP_201_CREATED)
 async def createLicencePlate(request: Request, licencePlate: LicencePlate):
     jwtToken = request.headers["Authorization"].split(" ")[1]
-    await LicencePlatesService.createLicencePlate(licencePlate, jwtToken)
-    return {"status": "Created"}
+    licencePlate = await LicencePlatesService.createLicencePlate(licencePlate, jwtToken)
+    return licencePlate
 
 
 @server_v1.post("/sighting", status_code=HTTP_201_CREATED)

@@ -16,7 +16,8 @@ async def createLicencePlate(licencePlate: LicencePlate, token: str) -> bool:
     user = await getUserByEmail(email)
     licencePlate.userID = user["userID"]
     if not await licencePlateExists(licencePlate.plateRegistration):
-        return await LicencePlateDao.createLicencePlate(licencePlate)
+        licencePlate.registrationID = await LicencePlateDao.createLicencePlate(licencePlate)
+        return licencePlate
     else:
         raise HTTPException(status_code=HTTP_409_CONFLICT, detail="Duplicate Licence plate")
 
