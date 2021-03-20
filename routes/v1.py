@@ -2,7 +2,7 @@ from fastapi import FastAPI, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from starlette.status import HTTP_201_CREATED, HTTP_401_UNAUTHORIZED
 from starlette.requests import Request
-from service import CamersService, LicencePlatesService, VehicleLocationsService, UserService
+from service import CamersService, LicencePlatesService, VehicleSightingsService, UserService
 from models.User import User
 from models.jwtUser import JWTUser
 from models.Camera import Camera
@@ -22,7 +22,7 @@ async def getCameras():
 
 @server_v1.get("/sightings")
 async def getVehicleSightings():
-    sightings = await VehicleLocationsService.getVehicleLocations()
+    sightings = await VehicleSightingsService.getVehicleSightings()
     return {"sightings": sightings}
 
 
@@ -43,14 +43,19 @@ async def getLicencePlates():
 @server_v1.post("/newUser", status_code=HTTP_201_CREATED)
 async def createUser(user: User):
     await UserService.createUser(user)
-    return {"status": "Created"}
+    return {
+        "userID": user.userID,
+        "email": user.email,
+        "first_name": user.firstName,
+        "last_name": user.lastName
+            }
 
 
 @server_v1.post("/camera", status_code=HTTP_201_CREATED)
 async def createCamera(request: Request, camera: Camera):
     jwtToken = request.headers["Authorization"].split(" ")[1]
-    cameraID = await CamersService.createCamera(camera, jwtToken)
-    return {"cameraID": cameraID, "url": camera.url, "city": camera.city, "country": camera.country}
+    camera = await CamersService.createCamera(camera, jwtToken)
+    return camera
 
 
 @server_v1.post("/licencePlate", status_code=HTTP_201_CREATED)
@@ -62,7 +67,7 @@ async def createLicencePlate(request: Request, licencePlate: LicencePlate):
 
 @server_v1.post("/sighting", status_code=HTTP_201_CREATED)
 async def createVehicleSighting(vehicleSighting: VehicleSighting):
-    await VehicleLocationsService.createVehicleSighting(vehicleSighting)
+    await VehicleSightingsService.createVehicleSighting(vehicleSighting)
     return {"status": "Created"}
 
 
@@ -118,5 +123,10 @@ async def updateCamera(request: Request, id: int, camera: Camera):
 @server_v1.put("/user/{id}")
 async def updateUser(request: Request, id: int, user: User):
     jwtToken = request.headers["Authorization"].split(" ")[1]
-    await UserService.updateUser(jwtToken, user, id)
-    return {"status": "User updated"}
+    newUser = await UserService.updateUser(jwtToken, user, id)
+    return {
+        "userID": user.userID,
+        "email": user.email,
+        "first_name": user.firstName,
+        "last_name": user.lastName
+            }

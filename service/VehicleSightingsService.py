@@ -1,4 +1,4 @@
-import dao.VehicleLocationsDao as LocationsDao
+import dao.VehicleSightingsDao as SightingsDao
 from models.vehicleSighting import VehicleSighting
 from service.LicencePlatesService import licencePlateExistsByID
 from fastapi import HTTPException
@@ -10,7 +10,7 @@ async def createVehicleSighting(vehicleSighting: VehicleSighting) -> bool:
         #vehicleSighting.DateTime = str(datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"))
         vehicleSighting.DateTime = datetime.utcnow()
         
-        if await LocationsDao.createVehicleSighting(vehicleSighting):
+        if await SightingsDao.createVehicleSighting(vehicleSighting):
             return True
 
         raise HTTPException(status_code=500, detail="Database error")
@@ -18,8 +18,8 @@ async def createVehicleSighting(vehicleSighting: VehicleSighting) -> bool:
     raise HTTPException(status_code=409, detail="Registration ID no longer valid")
 
 
-async def getVehicleLocations() -> [dict]:
-    res = await LocationsDao.getVehicleLocations()
+async def getVehicleSightings() -> [dict]:
+    res = await SightingsDao.getVehicleSightings()
     return [dict(item) for item in res]
 
     '''

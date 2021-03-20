@@ -11,7 +11,7 @@ async def getLicencePlates() -> [dict]:
     return [dict(item) for item in res]
 
 
-async def createLicencePlate(licencePlate: LicencePlate, token: str) -> bool:
+async def createLicencePlate(licencePlate: LicencePlate, token: str) -> LicencePlate:
     email = getEmailFromJWTToken(token)
     user = await getUserByEmail(email)
     licencePlate.userID = user["userID"]
@@ -51,7 +51,7 @@ async def deleteLicencePlate(token: str, licencePlateID: int) -> bool:
     raise HTTPException(status_code=HTTP_409_CONFLICT, detail="Licence plate does not belong to current user")
 
 
-async def updateLicencePlate(token: str, licencePlateID: int, licencePlate: LicencePlate) -> bool:
+async def updateLicencePlate(token: str, licencePlateID: int, licencePlate: LicencePlate) -> LicencePlate:
     email = getEmailFromJWTToken(token)
     user = await getUserByEmail(email)
     currentLicencePlate = await getLicencePlateByID(licencePlateID)

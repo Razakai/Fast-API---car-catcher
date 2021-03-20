@@ -12,12 +12,13 @@ async def getAllCameras() -> [dict]:
     return [dict(item) for item in res]
 
 
-async def createCamera(camera: Camera, token: str) -> bool:
+async def createCamera(camera: Camera, token: str) -> Camera:
     email = getEmailFromJWTToken(token)
     user = await getUserByEmail(email)
     camera.userID = user["userID"]
     if not await cameraExists(camera):
-        return await CameraDao.createCamera(camera)
+        camera.cameraID = await CameraDao.createCamera(camera)
+        return camera
     else:
         raise HTTPException(status_code=HTTP_409_CONFLICT, detail="Duplicate Camera")
 
@@ -47,7 +48,7 @@ async def deleteCamera(token: str, cameraID: int) -> bool:
     raise HTTPException(status_code=HTTP_409_CONFLICT, detail="Camera does not belong to current user")
 
 
-async def updateCamera(token: str, cameraID: int, camera: Camera) -> bool:
+async def updateCamera(token: str, cameraID: int, camera: Camera) -> Camera:
     email = getEmailFromJWTToken(token)
     user = await getUserByEmail(email)
     currentCamera = await getCameraByID(cameraID)
