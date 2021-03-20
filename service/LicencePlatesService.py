@@ -56,8 +56,12 @@ async def updateLicencePlate(token: str, licencePlateID: int, licencePlate: Lice
     user = await getUserByEmail(email)
     currentLicencePlate = await getLicencePlateByID(licencePlateID)
     if currentLicencePlate["userID"] == user["userID"]:
+        if licencePlate.userID == None:
+            licencePlate.userID = currentLicencePlate["userID"]
         if await LicencePlateDao.updateLicencePlate(licencePlate, licencePlateID):
-            return True
+            licencePlate.registrationID = licencePlateID
+            return licencePlate
+            
 
         raise HTTPException(status_code=HTTP_500_INTERNAL_SERVER_ERROR, detail="Could not update licence plate")
 
