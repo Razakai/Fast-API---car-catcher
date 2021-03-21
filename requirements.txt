@@ -5,6 +5,6 @@ pyjwt~=2.0.1
 passlib~=1.7.4
 bcrypt
 databases[mysql]~=0.4.1
-
+pika
 pydantic~=1.7.3
 starlette~=0.13.6

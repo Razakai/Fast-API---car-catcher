@@ -5,6 +5,8 @@ from starlette.responses import Response
 from starlette.status import HTTP_401_UNAUTHORIZED
 from utils.security import checkJWTToken
 from fastapi.middleware.cors import CORSMiddleware
+from utils.rabbitMQCommunitcation import createConnection, breakConnection
+from utils.database import connectDB, disconnectDB
 
 server = FastAPI()
 
@@ -21,8 +23,7 @@ server.add_middleware(
     allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["authorization", "Authorization" "Accept", "Accept-Language", "Content-Language", "Content-Type"],
-    #expose_headers=["*"]
+    allow_headers=["authorization", "Authorization" "Accept", "Accept-Language", "Content-Language", "Content-Type"]
 )
 
 
@@ -42,3 +43,17 @@ async def middleware(request: Request, callNext):
 
     response = await callNext(request)
     return response
+
+# on startup
+@server.on_event("startup")
+async def startRabbitConnection():
+    createConnection()
+    await connectDB()
+
+
+# on shutdown
+@server.on_event("shutdown")
+async def stopRabbitConnection():
+    breakConnection()
+    await disconnectDB()
+

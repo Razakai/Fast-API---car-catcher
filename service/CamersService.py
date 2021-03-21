@@ -4,6 +4,7 @@ from utils.security import getEmailFromJWTToken
 from service.UserService import getUserByEmail
 from fastapi import HTTPException
 from starlette.status import HTTP_409_CONFLICT, HTTP_404_NOT_FOUND, HTTP_500_INTERNAL_SERVER_ERROR
+from utils.rabbitMQCommunitcation import sendMessage
 
 
 async def getAllCameras() -> [dict]:
@@ -18,6 +19,7 @@ async def createCamera(camera: Camera, token: str) -> Camera:
     camera.userID = user["userID"]
     if not await cameraExists(camera):
         camera.cameraID = await CameraDao.createCamera(camera)
+        sendMessage(routing_key='testingDetection', body={"ID": camera.cameraID, "action": "add"})
         return camera
     else:
         raise HTTPException(status_code=HTTP_409_CONFLICT, detail="Duplicate Camera")
@@ -41,6 +43,7 @@ async def deleteCamera(token: str, cameraID: int) -> bool:
     camera = await getCameraByID(cameraID)
     if camera["userID"] == user["userID"]:
         if await CameraDao.deleteCamera(cameraID):
+            sendMessage(routing_key='testingDetection', body={"ID": cameraID, "action": "kill"})
             return True
 
         raise HTTPException(status_code=HTTP_500_INTERNAL_SERVER_ERROR, detail="Could not delete camera")
