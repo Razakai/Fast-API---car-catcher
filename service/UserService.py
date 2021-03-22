@@ -1,8 +1,7 @@
 import dao.UserImplementation as UserDao
 from models.User import User
 from fastapi import HTTPException
-from utils.security import getHashedPassword
-from utils.security import getEmailFromJWTToken
+from utils.security import getHashedPassword, verifyPassword, getEmailFromJWTToken
 from starlette.status import HTTP_409_CONFLICT, HTTP_404_NOT_FOUND, HTTP_500_INTERNAL_SERVER_ERROR
 
 
@@ -38,11 +37,11 @@ async def updateUser(token: str, user: User, id: int) -> User:
     email = getEmailFromJWTToken(token)
     currentUser = await getUserByEmail(email)
     if currentUser["userID"] == id:
-        if currentUser["password"] == user.password:
+        if verifyPassword(user.password, currentUser["password"]):
             if user.newPassword != None: # set new password
                 user.password = getHashedPassword(user.newPassword)
             else: # use current password
-                user.password = getHashedPassword(user.password)
+                user.password = currentUser["password"]
             if await UserDao.updateUser(user, id):
                 user.userID = id
                 return user
